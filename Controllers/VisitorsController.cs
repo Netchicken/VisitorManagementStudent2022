@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
 using VisitorManagementStudent2022.Data;
 using VisitorManagementStudent2022.Models;
 
@@ -52,8 +49,9 @@ namespace VisitorManagementStudent2022.Controllers
 
             //Create an instance of visitor
             Visitors visitor = new Visitors();
-            //pass int eh current date and time
+            //pass in the current date and time
             visitor.DateIn = DateTime.Now;
+            visitor.Business = "Mind Your Own";
 
 
             return View(visitor);
@@ -163,14 +161,14 @@ namespace VisitorManagementStudent2022.Controllers
             {
                 _context.Visitors.Remove(visitors);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool VisitorsExists(Guid id)
         {
-          return (_context.Visitors?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Visitors?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
