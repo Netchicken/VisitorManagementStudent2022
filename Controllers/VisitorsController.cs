@@ -4,21 +4,27 @@ using Microsoft.EntityFrameworkCore;
 
 using VisitorManagementStudent2022.Data;
 using VisitorManagementStudent2022.Models;
+using VisitorManagementStudent2022.Services;
 
 namespace VisitorManagementStudent2022.Controllers
 {
     public class VisitorsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IOperations _operations;
 
-        public VisitorsController(ApplicationDbContext context)
+
+        public VisitorsController(ApplicationDbContext context, IOperations operations)
         {
             _context = context;
+            _operations = operations;
         }
 
         // GET: Visitors
         public async Task<IActionResult> Index()
         {
+            _operations.DoStuff();
+            
             var applicationDbContext = _context.Visitors.Include(v => v.StaffName);
             return View(await applicationDbContext.ToListAsync());
         }
