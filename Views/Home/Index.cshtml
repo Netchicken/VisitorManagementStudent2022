@@ -1,18 +1,41 @@
-﻿@{
+﻿@model VisitorManagementStudent2022.Models.Visitors
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="">
     <h1 class="display-4 text-center"> @ViewData["Welcome"]</h1>
-    @*<p>@foreach (var item in (IEnumerable<string>)ViewData["Visitor"])
-        {
-            @item.fi;
-        }*@
+   
+
+    <div class="row">
+
+        <div class="col-6">
+
+            @await Html.PartialAsync("_Create")
+
+
+
+        </div>
+
+        <div class="col-6">
+
+
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
 
     </p>
     <p>@ViewBag.VisitorNew.FirstName</p>
-   
-    @await Html.PartialAsync("_Conditions") 
+
+    @await Html.PartialAsync("_Conditions")
 
 
 </div>

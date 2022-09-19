@@ -120,6 +120,7 @@ namespace VisitorManagementStudent2022.Controllers
         }
 
         // GET: StaffNames/Delete/5
+       
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null || _context.StaffNames == null)

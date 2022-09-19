@@ -4,28 +4,30 @@ using Microsoft.EntityFrameworkCore;
 
 using VisitorManagementStudent2022.Data;
 using VisitorManagementStudent2022.Models;
-using VisitorManagementStudent2022.Services;
+using VisitorManagementStudent2022.ViewModels;
 
 namespace VisitorManagementStudent2022.Controllers
 {
     public class VisitorsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IOperations _operations;
 
 
-        public VisitorsController(ApplicationDbContext context, IOperations operations)
+
+        public VisitorsController(ApplicationDbContext context)
         {
             _context = context;
-            _operations = operations;
+
         }
 
         // GET: Visitors
         public async Task<IActionResult> Index()
         {
-            _operations.DoStuff();
-            
+
+
             var applicationDbContext = _context.Visitors.Include(v => v.StaffName);
+
+            
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,16 +38,16 @@ namespace VisitorManagementStudent2022.Controllers
             {
                 return NotFound();
             }
-
-            var visitors = await _context.Visitors
+            
+            var visitorsVM = await _context.Visitors
                 .Include(v => v.StaffName)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (visitors == null)
+            if (visitorsVM == null)
             {
                 return NotFound();
             }
 
-            return View(visitors);
+            return View(visitorsVM);
         }
 
         // GET: Visitors/Create
@@ -54,13 +56,13 @@ namespace VisitorManagementStudent2022.Controllers
             ViewData["StaffNameId"] = new SelectList(_context.StaffNames, "Id", "Id");
 
             //Create an instance of visitor
-            Visitors visitor = new Visitors();
+            VisitorsVM visitorVM = new VisitorsVM();
             //pass in the current date and time
-            visitor.DateIn = DateTime.Now;
-            visitor.Business = "Mind Your Own";
+            visitorVM.DateIn = DateTime.Now;
+            visitorVM.Business = "Mind Your Own";
 
 
-            return View(visitor);
+            return View(visitorVM);
         }
 
         // POST: Visitors/Create
@@ -73,7 +75,9 @@ namespace VisitorManagementStudent2022.Controllers
             if (ModelState.IsValid)
             {
                 visitors.Id = Guid.NewGuid();
+                
                 _context.Add(visitors);
+                
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

@@ -16,7 +16,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IOperations, DifferentOperations>();
+builder.Services.AddScoped<ITextFileOperations,TextFileOperations>();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
