@@ -17,6 +17,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ITextFileOperations,TextFileOperations>();
+builder.Services.AddTransient<ISweetAlert, SweetAlert>();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,23 +14,24 @@ namespace VisitorManagementStudent2022.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        private readonly IMapper _mapper;
 
 
-        public VisitorsController(ApplicationDbContext context)
+        public VisitorsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
-
+            _mapper = mapper;
         }
 
         // GET: Visitors
         public async Task<IActionResult> Index()
         {
 
-
             var applicationDbContext = _context.Visitors.Include(v => v.StaffName);
 
-            
-            return View(await applicationDbContext.ToListAsync());
+            var VisitorsVM = _mapper.Map<IEnumerable<VisitorsVM>>(applicationDbContext);
+
+            return View(VisitorsVM);
         }
 
         // GET: Visitors/Details/5
@@ -38,14 +41,17 @@ namespace VisitorManagementStudent2022.Controllers
             {
                 return NotFound();
             }
-            
-            var visitorsVM = await _context.Visitors
+
+            var visitors = await _context.Visitors
                 .Include(v => v.StaffName)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (visitorsVM == null)
+            if (visitors == null)
             {
                 return NotFound();
             }
+
+            var visitorsVM = _mapper.Map<IEnumerable<VisitorsVM>>(visitors);
+
 
             return View(visitorsVM);
         }
@@ -70,20 +76,29 @@ namespace VisitorManagementStudent2022.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,DateIn,DateOut,StaffNameId")] Visitors visitors)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,DateIn,DateOut,StaffNameId")] VisitorsVM visitorsVM)
         {
+            Visitors visitors = new Visitors();
+
+            visitors = _mapper.Map(visitorsVM, visitors);
+
             if (ModelState.IsValid)
             {
                 visitors.Id = Guid.NewGuid();
-                
+
                 _context.Add(visitors);
-                
+
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StaffNameId"] = new SelectList(_context.StaffNames, "Id", "Id", visitors.StaffNameId);
-            return View(visitors);
+            ViewData["StaffNameId"] = new SelectList(_context.StaffNames, "Id", "Id", visitorsVM.StaffNameId);
+            return View(visitorsVM);
         }
+
+
+
+
 
         // GET: Visitors/Edit/5
         public async Task<IActionResult> Edit(Guid? id)

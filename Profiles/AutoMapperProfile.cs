@@ -13,6 +13,7 @@ namespace VisitorManagementStudent2022.Profiles
         {
 
             CreateMap<Visitors, VisitorsVM>().ReverseMap();
+            CreateMap<StaffNames, StaffNamesVM>().ReverseMap();
 
 
         }

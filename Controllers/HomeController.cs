@@ -7,6 +7,8 @@ using VisitorManagementStudent2022.Data;
 using VisitorManagementStudent2022.Models;
 using VisitorManagementStudent2022.Services;
 
+using static VisitorManagementStudent2022.Enum.SweetAlertEnum;
+
 namespace VisitorManagementStudent2022.Controllers
 {
     public class HomeController : Controller
@@ -15,17 +17,25 @@ namespace VisitorManagementStudent2022.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ITextFileOperations _textFileOperations;
         private readonly ApplicationDbContext _context;
+        private readonly ISweetAlert _sweetAlert;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment webHostEnvironment, ITextFileOperations textFileOperations, ApplicationDbContext context)
+
+
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment webHostEnvironment, ITextFileOperations textFileOperations, ApplicationDbContext context, ISweetAlert sweetAlert)
         {
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
             _textFileOperations = textFileOperations;
             _context = context;
+            _sweetAlert = sweetAlert;
         }
 
         public IActionResult Index()
         {
+
+            TempData["notification"] = _sweetAlert.AlertPopupWithImage("The Visitor Management System", "Automate and record visitor management", "/images/gary.jpg", NotificationType.success);
+
+
             ViewData["Conditions"] = _textFileOperations.LoadConditionsOfAcceptance();
 
 
@@ -68,8 +78,24 @@ namespace VisitorManagementStudent2022.Controllers
             if (ModelState.IsValid)
             {
                 visitors.Id = Guid.NewGuid();
+
+
+                //increase the counter 
+                var staff = _context.StaffNames.Find(visitors.StaffNameId);
+                staff.VisitorCount++;
+                _context.Update(staff);
+
+
+
+
+
+
+
                 _context.Add(visitors);
                 await _context.SaveChangesAsync();
+
+                TempData["create"] = _sweetAlert.AlertPopup("Welcome to the College", visitors.FirstName + " visiting " + staff.Name + " in " + staff.Department, NotificationType.success);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["StaffNameId"] = new SelectList(_context.StaffNames, "Id", "Id", visitors.StaffNameId);
