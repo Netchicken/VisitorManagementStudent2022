@@ -40,7 +40,7 @@ namespace VisitorManagementStudent2022.Controllers
 
         public IActionResult Index()
         {
-            Root root = _api.WeatherAPI().Result;
+            Root root = _api.WeatherAPI("8827252724a06575e5be376a09a53736", "https://api.openweathermap.org/data/2.5/weather?q=Christchurch&units=metric&appid=").Result;
             if (root != null)
             {
                 ViewData["Temp"] = "The temperature is " + root.main.temp + " degrees Celsius. But it feels like " + root.main.feels_like;

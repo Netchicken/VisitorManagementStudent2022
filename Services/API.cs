@@ -6,16 +6,12 @@ namespace VisitorManagementStudent2022.Services
 {
     public class API : IAPI
     {
-        public API()
-        {
-        }
-
         public string Message { get; set; } = null;
 
         //https://api.openweathermap.org/data/2.5/weather?q=Christchurch&units=metric&appid=8827252724a06575e5be376a09a53736
 
 
-        public async Task<Root> WeatherAPI()
+        public async Task<Root> WeatherAPI(string apiKey, string URL)
         {
             Root root = null;
             try
@@ -23,10 +19,7 @@ namespace VisitorManagementStudent2022.Services
 
                 HttpClient client = new HttpClient();
                 string responseBody = null;
-                string apiKey = "8827252724a06575e5be376a09a53736";
-                string URL = "https://api.openweathermap.org/data/2.5/weather?q=Christchurch&units=metric&appid=" + apiKey;
-
-                responseBody = await client.GetStringAsync(URL);
+                responseBody = await client.GetStringAsync(URL + apiKey);
                 root = JsonConvert.DeserializeObject<Root>(responseBody);
 
             }

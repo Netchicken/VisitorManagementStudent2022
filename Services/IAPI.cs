@@ -6,7 +6,6 @@ namespace VisitorManagementStudent2022.Services
     {
         string Message { get; set; }
 
-        Task<Root> WeatherAPI();
-
+        Task<Root> WeatherAPI(string apiKey, string URL);
     }
 }
