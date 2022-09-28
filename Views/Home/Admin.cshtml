@@ -1,0 +1,40 @@
+﻿<div>
+    <div class="row">
+        <div class="col-3">
+            <h4> Query Method</h4>
+            <ul>
+                @foreach (var item in (IEnumerable<Visitors>)ViewData["WhereQueryMethod"])
+                {
+                    <li> @item.FirstName @item.LastName </li>
+                }
+            </ul>
+            <h4> Where contains l</h4>
+            <ul>
+                @foreach (var item in (IEnumerable<StaffNames>)ViewData["WhereMethodSyntax"])
+                {
+                    <li> @item.Name @item.VisitorCount </li>
+                }
+            </ul>
+
+            <h4>OrderBy Descendng visitors count</h4>
+            <ul>
+                @foreach (var item in (IEnumerable<StaffNames>)ViewData["Orderby"])
+                {
+                    <li>   @item.Name  @item.VisitorCount    </li>
+                }
+            </ul>
+        </div>
+
+        @*<div class="col-3">
+            <h4> Distinct Method</h4>
+            <ul>
+            @foreach (var item in (IEnumerable<StaffNames>)ViewData["UniqueVisitorCount"])
+            {
+                <li> @item.Name @item.VisitorCount </li>
+            }
+        </ul>*@
+
+        </div>
+
+    </div>
+</div>

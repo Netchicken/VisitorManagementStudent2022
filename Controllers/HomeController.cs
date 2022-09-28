@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 using VisitorManagementStudent2022.Data;
+using VisitorManagementStudent2022.DTO;
 using VisitorManagementStudent2022.Models;
 using VisitorManagementStudent2022.Services;
 
@@ -18,22 +19,33 @@ namespace VisitorManagementStudent2022.Controllers
         private readonly ITextFileOperations _textFileOperations;
         private readonly ApplicationDbContext _context;
         private readonly ISweetAlert _sweetAlert;
+        private readonly IDBCalls _dbCalls;
+        private readonly IAPI _api;
 
 
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment webHostEnvironment, ITextFileOperations textFileOperations, ApplicationDbContext context, ISweetAlert sweetAlert)
+
+
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment webHostEnvironment, ITextFileOperations textFileOperations, ApplicationDbContext context, ISweetAlert sweetAlert, IDBCalls dbCalls, IAPI api)
         {
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
             _textFileOperations = textFileOperations;
             _context = context;
+
             _sweetAlert = sweetAlert;
+            _dbCalls = dbCalls;
+            _api = api;
         }
 
         public IActionResult Index()
         {
+            Root root = _api.WeatherAPI().Result;
 
-            TempData["notification"] = _sweetAlert.AlertPopupWithImage("The Visitor Management System", "Automate and record visitor management", "/images/gary.jpg", NotificationType.success);
+
+
+
+         //      TempData["notification"] = _sweetAlert.AlertPopupWithImage("The Visitor Management System", "Automate and record visitor management", "/images/gary.jpg", NotificationType.success);
 
 
             ViewData["Conditions"] = _textFileOperations.LoadConditionsOfAcceptance();
@@ -86,11 +98,6 @@ namespace VisitorManagementStudent2022.Controllers
                 _context.Update(staff);
 
 
-
-
-
-
-
                 _context.Add(visitors);
                 await _context.SaveChangesAsync();
 
@@ -103,7 +110,20 @@ namespace VisitorManagementStudent2022.Controllers
         }
 
 
+        public IActionResult Admin()
+        {
 
+            ViewData["WhereQueryMethod"] = _dbCalls.WhereQuery();
+            ViewData["WhereMethodSyntax"] = _dbCalls.WhereMethodSyntax();
+            ViewData["Orderby"] = _dbCalls.OrderBy();
+            ViewData["UniqueVisitorCount"] = _dbCalls.UniqueVisitorCount();
+
+
+            return View();
+
+
+
+        }
 
 
 

@@ -16,10 +16,15 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<ITextFileOperations,TextFileOperations>();
-builder.Services.AddTransient<ISweetAlert, SweetAlert>();
+builder.Services.AddScoped<ITextFileOperations, TextFileOperations>();
 
+builder.Services.AddSingleton<SweetAlert>();
+builder.Services.AddSingleton<ISweetAlert, SweetAlert>(implementationFactory: x => x.GetRequiredService<SweetAlert>());
+builder.Services.AddSingleton<ISweetAlert2, SweetAlert>(x => x.GetRequiredService<SweetAlert>());
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddTransient<IDBCalls, DBCalls>();
+builder.Services.AddSingleton<IAPI, API>();
 
 var app = builder.Build();
 

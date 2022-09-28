@@ -9,3 +9,9 @@
 {
     @Html.Raw(TempData["create"])
 }
+
+
+@if ((TempData["aPIResponse"] != null))
+{
+    @Html.Raw(TempData["aPIResponse"])
+}
