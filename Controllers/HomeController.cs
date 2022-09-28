@@ -41,10 +41,23 @@ namespace VisitorManagementStudent2022.Controllers
         public IActionResult Index()
         {
             Root root = _api.WeatherAPI().Result;
+            if (root != null)
+            {
+                ViewData["Temp"] = "The temperature is " + root.main.temp + " degrees Celsius. But it feels like " + root.main.feels_like;
 
-            ViewData["Temp"] = "The temperature is " + root.main.temp + " degrees Celsius. But it feels like " + root.main.feels_like;
+                ViewData["Wind"] = "The wind is " + root.wind.speed + " kph at " + Compass(root.wind.deg) + " and the humidity is  " + root.main.humidity + " kpa";
+            }
+            else
+            {
 
-            ViewData["Wind"] = "The wind is " + root.wind.speed + " kph at " + root.wind.deg + " degrees, and the humidity is  " + root.main.humidity + " kpa" + " Wind direction is " + Compass(root.wind.deg);
+                TempData["aPIResponse"] = _sweetAlert.AlertPopupNoNotif("You have an Error!", _api.Message);
+            }
+
+
+
+
+
+
 
             //      TempData["notification"] = _sweetAlert.AlertPopupWithImage("The Visitor Management System", "Automate and record visitor management", "/images/gary.jpg", NotificationType.success);
 
@@ -84,11 +97,10 @@ namespace VisitorManagementStudent2022.Controllers
 
         private string Compass(int windDegrees)
         {
-            var data = windDegrees;
             var degrees = windDegrees;
-            string[] caridnals = { "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N" };
-            var test = caridnals[(int)Math.Round(((double)degrees * 10 % 3600) / 225)];
-            return test;
+            string[] cardinals = { "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N" };
+            return cardinals[(int)Math.Round(((double)degrees * 10 % 3600) / 225)];
+
         }
 
 
