@@ -42,10 +42,15 @@ namespace VisitorManagementStudent2022.Controllers
         {
             Root root = _api.WeatherAPI().Result;
 
+            ViewData["Temp"] = "The temperature is " + root.main.temp + " degrees Celsius. But it feels like " + root.main.feels_like;
+
+            ViewData["Wind"] = "The wind is " + root.wind.speed + " kph at " + root.wind.deg + " degrees, and the humidity is  " + root.main.humidity + " kpa" + " Wind direction is " + Compass(root.wind.deg);
+
+            //      TempData["notification"] = _sweetAlert.AlertPopupWithImage("The Visitor Management System", "Automate and record visitor management", "/images/gary.jpg", NotificationType.success);
 
 
 
-         //      TempData["notification"] = _sweetAlert.AlertPopupWithImage("The Visitor Management System", "Automate and record visitor management", "/images/gary.jpg", NotificationType.success);
+
 
 
             ViewData["Conditions"] = _textFileOperations.LoadConditionsOfAcceptance();
@@ -77,7 +82,14 @@ namespace VisitorManagementStudent2022.Controllers
         }
 
 
-
+        private string Compass(int windDegrees)
+        {
+            var data = windDegrees;
+            var degrees = windDegrees;
+            string[] caridnals = { "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N" };
+            var test = caridnals[(int)Math.Round(((double)degrees * 10 % 3600) / 225)];
+            return test;
+        }
 
 
         // POST: Visitors/Create

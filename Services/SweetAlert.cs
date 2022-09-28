@@ -2,7 +2,7 @@
 
 namespace VisitorManagementStudent2022.Services
 {
-    public class SweetAlert : ISweetAlert, ISweetAlert2 
+    public class SweetAlert : ISweetAlert, ISweetAlert2
     {
         /// <summary>
         /// SweetAlert popups  https://sweetalert2.github.io/#download https://sweetalert2.github.io/#input-types
@@ -52,5 +52,17 @@ namespace VisitorManagementStudent2022.Services
                  "buttons: false, " +
                  "timer: '5000'})</script>";
         }
+
+
+        public string AlertPopupNoNotif(string title, string message)
+        {
+            return "<script type=\"text/javascript\">Swal.fire({ " +
+                "title: '" + title + "', " +
+                "text: '" + message + "', " +
+                "timer: '10000'})</script>";
+        }
+
+
+
     }
 }

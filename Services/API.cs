@@ -4,13 +4,11 @@ using Newtonsoft.Json;
 
 using VisitorManagementStudent2022.DTO;
 
-using static VisitorManagementStudent2022.Enum.SweetAlertEnum;
-
 namespace VisitorManagementStudent2022.Services
 {
-    public class API : Controller, IAPI
+    public class API :  IAPI
     {
-
+       // public TempDataDictionary TempData { get; set; }
         private readonly ISweetAlert _sweetAlert;
         public API(ISweetAlert sweetAlert)
         {
@@ -30,7 +28,7 @@ namespace VisitorManagementStudent2022.Services
 
                 HttpClient client = new HttpClient();
                 string responseBody = null;
-                string apiKey = "8827252724a06575e5be376a09a537369";
+                string apiKey = "8827252724a06575e5be376a09a53736";
                 string URL = "https://api.openweathermap.org/data/2.5/weather?q=Christchurch&units=metric&appid=" + apiKey;
 
                 responseBody = await client.GetStringAsync(URL);
@@ -42,19 +40,23 @@ namespace VisitorManagementStudent2022.Services
             {
 
 
-                switch (root.cod)
-                {
-                    case 200:
-                        TempData["aPIResponse"] = _sweetAlert.AlertPopup("Working as expected", "Happy Days!", NotificationType.s);
-                        break;
-                    case 401:
-                        TempData["aPIResponse"] = _sweetAlert.AlertPopup("Unauthorized 401", "The API is not working returning a 401.", NotificationType.error);
-                        break;
+             //   TempData["aPIResponse"] = "test";
 
-                    default:
-                        //   Statement
-                        break;
-                }
+                // TempData["aPIResponse"] = _sweetAlert.AlertPopupNoNotif(ex.Message, ex.Message);
+
+                //switch (ex.Message)
+                //{
+                //    case 200:
+
+                //        break;
+                //    case 401:
+                //        TempData["aPIResponse"] = _sweetAlert.AlertPopup("Unauthorized 401", "The API is not working returning a 401.", NotificationType.error);
+                //        break;
+
+                //    default:
+                //        //   Statement
+                //        break;
+                //}
 
 
 

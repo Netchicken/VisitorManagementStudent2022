@@ -18,9 +18,12 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<ITextFileOperations, TextFileOperations>();
 
-builder.Services.AddSingleton<SweetAlert>();
-builder.Services.AddSingleton<ISweetAlert, SweetAlert>(implementationFactory: x => x.GetRequiredService<SweetAlert>());
-builder.Services.AddSingleton<ISweetAlert2, SweetAlert>(x => x.GetRequiredService<SweetAlert>());
+builder.Services.AddSingleton<ISweetAlert, SweetAlert>();
+
+
+//builder.Services.AddSingleton<SweetAlert>();
+//builder.Services.AddSingleton<ISweetAlert, SweetAlert>(implementationFactory: x => x.GetRequiredService<SweetAlert>());
+//builder.Services.AddSingleton<ISweetAlert2, SweetAlert>(x => x.GetRequiredService<SweetAlert>());
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddTransient<IDBCalls, DBCalls>();
